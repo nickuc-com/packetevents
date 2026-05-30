@@ -101,7 +101,7 @@ public class PacketEventsDecoder extends MessageToMessageDecoder<ByteBuf> {
 
         if (PacketEvents.getAPI().getSettings().isKickOnPacketExceptionEnabled()) {
             try {
-                if (user != null) {
+                if (user != null && user.getEncoderState() == ConnectionState.PLAY) {
                     user.sendPacket(new WrapperPlayServerDisconnect(Component.text("Invalid packet")));
                 }
             } catch (Exception ignored) { // There may (?) be an exception if the player is in the wrong state...
