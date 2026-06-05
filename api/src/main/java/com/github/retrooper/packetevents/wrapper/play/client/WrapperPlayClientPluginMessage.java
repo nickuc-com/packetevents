@@ -57,7 +57,11 @@ public class WrapperPlayClientPluginMessage extends WrapperCommonClientPluginMes
             int legacyDataSize = readShort();
         }
 
-        if (ByteBufHelper.readableBytes(buffer) > 32767) throw new RuntimeException("Payload may not be larger than 32767 bytes");
+        int readableBytes = ByteBufHelper.readableBytes(this.buffer);
+        if (readableBytes > 16777216) {
+            throw new RuntimeException("Payload may not be larger than 16MB, got "  + readableBytes + " bytes");
+        }
+
         this.data = readRemainingBytes();
     }
 
