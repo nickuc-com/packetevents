@@ -27,7 +27,7 @@ public final class JulLegacyLogManager extends LogManager {
     }
 
     @Override
-    public void log(Level level, ComponentLike component, @Nullable Throwable error) {
+    protected void log(Level level, ComponentLike component, @Nullable Throwable error) {
         LOGGER.log(level, legacySection().serialize(component.asComponent()), error);
     }
 }

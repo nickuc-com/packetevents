@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
@@ -73,10 +74,17 @@ public abstract class LogManager {
         if (color != null) {
             component = text().append(component).color(color);
         }
-        this.log(level, component, error);
+
+        LogRecord logRecord = new LogRecord(level, message);
+        logRecord.setThrown(error);
+        logRecord.setLoggerName(LOGGER_NAME);
+
+        if (packetevents.getSettings().getLogFilter().isLoggable(logRecord)) {
+            this.log(level, component, error);
+        }
     }
 
-    public abstract void log(Level level, ComponentLike component, @Nullable Throwable error);
+    protected abstract void log(Level level, ComponentLike component, @Nullable Throwable error);
 
     public void info(String message) {
         this.log(Level.INFO, null, message);

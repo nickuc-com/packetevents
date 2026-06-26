@@ -33,7 +33,7 @@ public final class ComponentLogManager extends LogManager {
     }
 
     @Override
-    public void log(Level level, ComponentLike component, @Nullable Throwable error) {
+    protected void log(Level level, ComponentLike component, @Nullable Throwable error) {
         Component message = component.asComponent();
         if (level == Level.FINEST || level == Level.FINER) {
             this.logger.trace(message, error);

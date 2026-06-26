@@ -34,7 +34,7 @@ public final class Slf4jLogManager extends LogManager {
     }
 
     @Override
-    public void log(Level level, ComponentLike component, @Nullable Throwable error) {
+    protected void log(Level level, ComponentLike component, @Nullable Throwable error) {
         String message = AdventureSerializer.stringify(component.asComponent());
         if (level == Level.FINEST || level == Level.FINER) {
             this.logger.trace(message, error);

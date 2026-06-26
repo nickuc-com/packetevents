@@ -22,7 +22,9 @@ import com.github.retrooper.packetevents.util.TimeStampMode;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.logging.Filter;
 
 /**
  * Packet Events' settings.
@@ -40,6 +42,7 @@ public class PacketEventsSettings {
     private boolean fullStackTraceEnabled = false;
     private boolean kickOnPacketExceptionEnabled = true;
     private boolean kickIfTerminated = true;
+    private Filter logFilter = logRecord -> true;
     private Function<String, InputStream> resourceProvider = path -> PacketEventsSettings.class
             .getClassLoader()
             .getResourceAsStream(path);
@@ -153,6 +156,19 @@ public class PacketEventsSettings {
     }
 
     /**
+     * Sets the log filter.
+     *
+     * @param logFilter the log filter to set
+     * @throws NullPointerException if {@code logFilter} is {@code null}
+     * @return Settings instance.
+     */
+    @ApiStatus.Internal
+    public PacketEventsSettings logFilter(Filter logFilter) {
+        this.logFilter = Objects.requireNonNull(logFilter, "logFilter");
+        return this;
+    }
+
+    /**
      * Some projects may want to implement a CDN with resources like asset mappings
      * By default, all resources are retrieved from the ClassLoader
      *
@@ -239,6 +255,15 @@ public class PacketEventsSettings {
      */
     public boolean isKickIfTerminated() {
         return kickIfTerminated;
+    }
+
+    /**
+     * Returns the filter used to query the logs.
+     *
+     * @return the log filter
+     */
+    public Filter getLogFilter() {
+        return logFilter;
     }
 
     /**
