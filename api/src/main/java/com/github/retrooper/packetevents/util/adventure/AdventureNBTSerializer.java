@@ -621,11 +621,10 @@ public class AdventureNBTSerializer implements ComponentSerializer<Component, Co
             NBTWriter child = writer.child(modern ? "click_event" : "clickEvent");
             child.writeUTF("action", clickEvent.action().toString());
             if (!modern) {
-                if (clickEvent.action() != ClickEvent.Action.CHANGE_PAGE) {
-                    child.writeUTF("value", AdventureSupportUtil.getStringValue(clickEvent));
-                } else {
-                    child.writeUTF("value", Integer.toString(AdventureSupportUtil.getIntValue(clickEvent)));
-                }
+                String value = clickEvent.action().toString().equals("change_page")
+                        ? Integer.toString(AdventureSupportUtil.getIntValue(clickEvent))
+                        : AdventureSupportUtil.getStringValue(clickEvent);
+                child.writeUTF("value", value);
             } else {
                 switch (clickEvent.action().name().toLowerCase(Locale.ROOT)) {
                     case "open_url":
